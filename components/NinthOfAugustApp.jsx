@@ -453,9 +453,15 @@ export default function NinthOfAugustApp() {
                       Delivery: {quote.turnaround}
                     </div>
                   )}
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 16px", background: "#f0faf0", borderRadius: 8, fontSize: 12, color: "#4a8a4a", fontFamily: "'DM Mono', monospace", marginBottom: 32 }}>
-                    ✓ Full breakdown sent to {clientEmail}
-                  </div>
+                  {quote.emailSent ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 16px", background: "#f0faf0", border: "1px solid #c0dcc0", borderRadius: 8, fontSize: 12, color: "#4a8a4a", fontFamily: "'DM Mono', monospace", marginBottom: 32 }}>
+                      ✓ Full breakdown sent to {clientEmail}
+                    </div>
+                  ) : (
+                    <div style={{ padding: "12px 16px", background: "#fff8f0", border: "1px solid #f0d8b0", borderRadius: 8, fontSize: 12, color: "#996600", fontFamily: "'DM Mono', monospace", marginBottom: 32 }}>
+                      Email not sent{quote.emailError ? `: ${quote.emailError}` : " — check your RESEND_API_KEY env var"}
+                    </div>
+                  )}
                   <button onClick={resetQuote} style={{ width: "100%", padding: 14, borderRadius: 6, border: "1px solid #ddd", background: "#fff", color: "#888", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 12 }}>← Start Over</button>
                 </div>
               ) : (

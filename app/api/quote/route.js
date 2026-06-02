@@ -46,12 +46,14 @@ Return ONLY valid JSON with no markdown fences:
   const text = anthropicData.content?.find(b => b.type === 'text')?.text || '{}';
   const quote = JSON.parse(text.replace(/```json|```/g, '').trim());
 
-  // Send email via Resend if configured
+  let emailSent = false;
+  let emailError = null;
+
   if (email && process.env.RESEND_API_KEY) {
     try {
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
-      await resend.emails.send({
+      const { error } = await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
         to: email,
         subject: 'Your Custom Quote — 9th of August',
@@ -71,10 +73,17 @@ Return ONLY valid JSON with no markdown fences:
           </div>
         `,
       });
-    } catch (_) {
-      // Email failure doesn't break the quote response
+      if (error) {
+        emailError = error.message;
+      } else {
+        emailSent = true;
+      }
+    } catch (err) {
+      emailError = err.message;
     }
+  } else if (!process.env.RESEND_API_KEY) {
+    emailError = 'RESEND_API_KEY not configured';
   }
 
-  return NextResponse.json(quote);
+  return NextResponse.json({ ...quote, emailSent, emailError });
 }

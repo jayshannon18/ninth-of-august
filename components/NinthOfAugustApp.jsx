@@ -24,15 +24,14 @@ const PORTFOLIO = [
 
 const CATEGORIES = ["All", "Portrait", "Lifestyle", "Product"];
 
-const STEPS = ["Project Type", "Style & Budget", "Location", "Match"];
-const PROJECT_TYPES = ["Brand Campaign", "Portrait Session", "Product Shoot", "Lifestyle Content", "Corporate Event", "Music Video"];
-const STYLES = ["Editorial", "Cinematic", "Lifestyle", "Documentary", "Bold & Vibrant", "Minimalist"];
-
-const CREATORS = [
-  { id: 1, name: "Maya Chen", type: "Photographer", style: "Editorial", location: "Los Angeles, CA", rating: 4.9, reviews: 127, price: 350, available: true, tags: ["Fashion", "Brand", "Portrait"], initials: "MC" },
-  { id: 2, name: "Jordan Ellis", type: "Videographer", style: "Cinematic", location: "New York, NY", rating: 5.0, reviews: 89, price: 650, available: true, tags: ["Wedding", "Commercial", "Documentary"], initials: "JE" },
-  { id: 3, name: "Sofia Reyes", type: "Photographer", style: "Lifestyle", location: "Miami, FL", rating: 4.8, reviews: 214, price: 275, available: false, tags: ["Lifestyle", "Events", "Product"], initials: "SR" },
-  { id: 4, name: "Zara Okonkwo", type: "Photographer", style: "Bold & Vibrant", location: "Austin, TX", rating: 4.9, reviews: 178, price: 420, available: true, tags: ["Portrait", "Fashion", "Art"], initials: "ZO" },
+const SHOOT_TYPES = ["Brand Campaign", "Portrait Session", "Product Shoot", "Lifestyle Content", "Event Coverage", "Music Video", "Wedding"];
+const MEDIA_TYPES = ["Photography", "Videography", "Both"];
+const DURATIONS = [
+  { label: "2 Hours", desc: "Quick session — headshots, simple product" },
+  { label: "4 Hours (Half Day)", desc: "Most portrait & product shoots" },
+  { label: "8 Hours (Full Day)", desc: "Brand campaigns, events, full production" },
+  { label: "2 Days", desc: "Multi-look campaigns, extended coverage" },
+  { label: "3+ Days", desc: "Large-scale productions, destination shoots" },
 ];
 
 // ─── Subcomponents ──────────────────────────────────────────────
@@ -43,60 +42,8 @@ function LoadingDots() {
       {[0,1,2].map(i => (
         <span key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: "#1a1a1a", display: "inline-block",
           animation: "dotPulse 1.2s ease-in-out infinite", animationDelay: `${i*0.2}s` }} />
-      ))} 
+      ))}
     </span>
-  );
-}
-
-function CreatorCard({ creator, featured }) {
-  const [booked, setBooked] = useState(false);
-  return (
-    <div style={{
-      background: "#fff", border: featured ? "2px solid #1a1a1a" : "1px solid #e8e3dc",
-      borderRadius: 12, padding: 24, position: "relative",
-      transition: "transform 0.2s, box-shadow 0.2s",
-      boxShadow: featured ? "4px 4px 0 #1a1a1a" : "none",
-    }}
-      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = featured ? "6px 6px 0 #1a1a1a" : "0 8px 24px rgba(0,0,0,0.08)"; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = featured ? "4px 4px 0 #1a1a1a" : "none"; }}
-    >
-      {featured && (
-        <div style={{ position: "absolute", top: -12, left: 20, background: "#1a1a1a", color: "#f5f0e8", fontSize: 10, fontWeight: 700, letterSpacing: 2, padding: "3px 12px", borderRadius: 20, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
-          Best Match
-        </div>
-      )}
-      <div style={{ display: "flex", gap: 14, marginBottom: 16, alignItems: "flex-start" }}>
-        <div style={{ width: 48, height: 48, borderRadius: 10, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#f5f0e8", fontFamily: "'DM Mono', monospace", flexShrink: 0 }}>
-          {creator.initials}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontWeight: 700, fontSize: 16, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', serif" }}>{creator.name}</div>
-          <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{creator.type} · {creator.style}</div>
-          <div style={{ fontSize: 11, color: "#aaa", marginTop: 1 }}>📍 {creator.location}</div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontWeight: 700, fontSize: 18, color: "#1a1a1a", fontFamily: "'DM Mono', monospace" }}>${creator.price}</div>
-          <div style={{ fontSize: 10, color: "#aaa" }}>/ day</div>
-        </div>
-      </div>
-      <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 16 }}>
-        {creator.tags.map(t => (
-          <span key={t} style={{ fontSize: 10, padding: "3px 9px", borderRadius: 20, background: "#f5f0e8", color: "#666", fontFamily: "'DM Mono', monospace", border: "1px solid #e8e3dc" }}>{t}</span>
-        ))}
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 13, color: "#666" }}>★ {creator.rating} <span style={{ color: "#bbb" }}>({creator.reviews})</span></div>
-        <button onClick={() => creator.available && setBooked(b => !b)} style={{
-          padding: "8px 18px", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: creator.available ? "pointer" : "not-allowed",
-          border: booked ? "1px solid #4a8a4a" : "1px solid #1a1a1a",
-          background: booked ? "#f0faf0" : featured ? "#1a1a1a" : "#fff",
-          color: booked ? "#4a8a4a" : featured ? "#f5f0e8" : "#1a1a1a",
-          opacity: creator.available ? 1 : 0.4, fontFamily: "'DM Mono', monospace", transition: "all 0.15s",
-        }}>
-          {booked ? "✓ Sent" : creator.available ? "Book" : "Unavailable"}
-        </button>
-      </div>
-    </div>
   );
 }
 
@@ -106,51 +53,36 @@ export default function NinthOfAugustApp() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [lightbox, setLightbox] = useState(null);
   const [step, setStep] = useState(0);
-  const [projectType, setProjectType] = useState("");
-  const [creatorType, setCreatorType] = useState("");
-  const [budget, setBudget] = useState(500);
-  const [style, setStyle] = useState("");
-  const [city, setCity] = useState("");
-  const [aiThinking, setAiThinking] = useState(false);
-  const [matches, setMatches] = useState(null);
-  const [aiNote, setAiNote] = useState("");
+  const [shootType, setShootType] = useState("");
+  const [mediaType, setMediaType] = useState("");
+  const [duration, setDuration] = useState(null);
+  const [clientCity, setClientCity] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [quoting, setQuoting] = useState(false);
+  const [quote, setQuote] = useState(null);
 
   const filtered = activeCategory === "All" ? PORTFOLIO : PORTFOLIO.filter(p => p.category === activeCategory);
 
-  async function runAIMatch() {
-    setAiThinking(true);
-    setStep(3);
-    try {
-      const res = await fetch("/api/match", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: `You are a creative talent matchmaker for 9th of August, a premium photography and videography booking platform.
-Client needs:
-- Project: ${projectType}
-- Creator type: ${creatorType || "Either"}
-- Style: ${style || "No preference"}
-- Budget: up to $${budget}/day
-- Location: ${city || "Anywhere"}
-Creators: ${CREATORS.map(c => `ID ${c.id}: ${c.name} (${c.type}, ${c.style}, ${c.location}, $${c.price}/day, available: ${c.available})`).join("; ")}
-Return ONLY JSON: {"topMatchIds": [1-3 IDs], "note": "1-2 warm sentences about why these are great picks"}` }]
-        })
-      });
-      const data = await res.json();
-      const text = data.content?.find(b => b.type === "text")?.text || "{}";
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      setMatches(parsed.topMatchIds || []);
-      setAiNote(parsed.note || "Here are your top matches.");
-    } catch {
-      setMatches([1, 4]);
-      setAiNote("These creators are an excellent fit for your project style and budget.");
-    }
-    setAiThinking(false);
+  function resetQuote() {
+    setStep(0); setQuote(null); setShootType(""); setMediaType(""); setDuration(null); setClientCity(""); setClientEmail("");
   }
 
-  const matchedCreators = matches ? CREATORS.filter(c => matches.includes(c.id)).sort((a, b) => matches.indexOf(a.id) - matches.indexOf(b.id)) : [];
+  async function getQuote() {
+    setQuoting(true);
+    setStep(3);
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shootType, mediaType, duration, location: clientCity, email: clientEmail }),
+      });
+      const data = await res.json();
+      setQuote(data);
+    } catch {
+      setQuote({ error: true });
+    }
+    setQuoting(false);
+  }
 
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
@@ -191,7 +123,7 @@ Return ONLY JSON: {"topMatchIds": [1-3 IDs], "note": "1-2 warm sentences about w
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: "#1a1a1a", letterSpacing: 0.5 }}>9th of August</span>
         </button>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          {[["Work", "portfolio"], ["Book", "wizard"]].map(([label, v]) => (
+          {[["Work", "portfolio"], ["Pricing", "wizard"]].map(([label, v]) => (
             <button key={v} onClick={() => { setView(v); setStep(0); setMatches(null); }} style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: view === v ? "#1a1a1a" : "transparent", color: view === v ? "#f5f0e8" : "#666", fontSize: 13, cursor: "pointer", fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{label}</button>
           ))}
         </div>
@@ -216,7 +148,7 @@ Return ONLY JSON: {"topMatchIds": [1-3 IDs], "note": "1-2 warm sentences about w
               </p>
               <div style={{ display: "flex", gap: 12 }}>
                 <button onClick={() => setView("wizard")} style={{ padding: "14px 32px", borderRadius: 6, border: "none", background: "#1a1a1a", color: "#f5f0e8", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: 0.5, transition: "opacity 0.15s" }} onMouseEnter={e=>e.target.style.opacity=.8} onMouseLeave={e=>e.target.style.opacity=1}>
-                  Get Matched →
+                  Get a Quote →
                 </button>
                 <button onClick={() => setView("portfolio")} style={{ padding: "14px 32px", borderRadius: 6, border: "1px solid #1a1a1a", background: "transparent", color: "#1a1a1a", fontSize: 14, cursor: "pointer", fontFamily: "'DM Mono', monospace" }}>
                   See Work
@@ -357,7 +289,7 @@ Return ONLY JSON: {"topMatchIds": [1-3 IDs], "note": "1-2 warm sentences about w
             </h2>
             <p style={{ fontSize: 17, color: "#888", marginBottom: 48, fontWeight: 300 }}>Match with a creator in minutes. No back-and-forth, no guesswork.</p>
             <button onClick={() => setView("wizard")} style={{ padding: "18px 48px", border: "none", borderRadius: 6, background: "#1a1a1a", color: "#f5f0e8", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: 0.5 }}>
-              Find My Match →
+              Get a Quote →
             </button>
           </div>
         </div>
@@ -396,101 +328,140 @@ Return ONLY JSON: {"topMatchIds": [1-3 IDs], "note": "1-2 warm sentences about w
 
       {/* ── WIZARD ── */}
       {view === "wizard" && (
-        <div className="fade-in" style={{ maxWidth: 640, margin: "0 auto", padding: "60px 24px" }}>
+        <div className="fade-in" style={{ maxWidth: 600, margin: "0 auto", padding: "60px 24px" }}>
+
+          {/* Progress bar */}
           {step < 3 && (
             <div style={{ marginBottom: 48 }}>
               <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
-                {STEPS.slice(0,3).map((_, i) => (
+                {[0,1,2].map(i => (
                   <div key={i} style={{ flex: 1, height: 2, borderRadius: 2, background: i <= step ? "#1a1a1a" : "#ddd", transition: "background 0.3s" }} />
                 ))}
               </div>
-              <div style={{ fontSize: 11, color: "#aaa", fontFamily: "'DM Mono', monospace" }}>Step {step + 1} of 3 — {STEPS[step]}</div>
+              <div style={{ fontSize: 11, color: "#aaa", fontFamily: "'DM Mono', monospace" }}>
+                Step {step + 1} of 3 — {["Shoot Details", "Duration", "Location & Contact"][step]}
+              </div>
             </div>
           )}
 
+          {/* Step 0: Shoot type + media type */}
           {step === 0 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>What's the project?</h2>
-              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>Help us understand what you're creating.</p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>What are you creating?</h2>
+              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>Tell us about the project and we'll build a custom quote.</p>
               <div style={{ marginBottom: 28 }}>
-                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Project Type</div>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Type of shoot</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {PROJECT_TYPES.map(p => (
-                    <button key={p} onClick={() => setProjectType(p)} style={{ padding: "10px 18px", borderRadius: 6, border: "1px solid", borderColor: projectType === p ? "#1a1a1a" : "#ddd", background: projectType === p ? "#1a1a1a" : "#fff", color: projectType === p ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{p}</button>
+                  {SHOOT_TYPES.map(t => (
+                    <button key={t} onClick={() => setShootType(t)} style={{ padding: "10px 18px", borderRadius: 6, border: "1px solid", borderColor: shootType === t ? "#1a1a1a" : "#ddd", background: shootType === t ? "#1a1a1a" : "#fff", color: shootType === t ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{t}</button>
                   ))}
                 </div>
               </div>
               <div style={{ marginBottom: 40 }}>
-                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>I need a…</div>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Services needed</div>
                 <div style={{ display: "flex", gap: 8 }}>
-                  {["Photographer", "Videographer", "Both"].map(t => (
-                    <button key={t} onClick={() => setCreatorType(t)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid", borderColor: creatorType === t ? "#1a1a1a" : "#ddd", background: creatorType === t ? "#1a1a1a" : "#fff", color: creatorType === t ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{t}</button>
+                  {MEDIA_TYPES.map(m => (
+                    <button key={m} onClick={() => setMediaType(m)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid", borderColor: mediaType === m ? "#1a1a1a" : "#ddd", background: mediaType === m ? "#1a1a1a" : "#fff", color: mediaType === m ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{m}</button>
                   ))}
                 </div>
               </div>
-              <button disabled={!projectType} onClick={() => setStep(1)} style={{ width: "100%", padding: 16, borderRadius: 6, border: "none", background: projectType ? "#1a1a1a" : "#e8e3dc", color: projectType ? "#f5f0e8" : "#aaa", fontSize: 14, fontWeight: 600, cursor: projectType ? "pointer" : "not-allowed", fontFamily: "'DM Mono', monospace", transition: "all 0.2s" }}>Continue →</button>
+              <button disabled={!shootType || !mediaType} onClick={() => setStep(1)} style={{ width: "100%", padding: 16, borderRadius: 6, border: "none", background: (shootType && mediaType) ? "#1a1a1a" : "#e8e3dc", color: (shootType && mediaType) ? "#f5f0e8" : "#aaa", fontSize: 14, fontWeight: 600, cursor: (shootType && mediaType) ? "pointer" : "not-allowed", fontFamily: "'DM Mono', monospace", transition: "all 0.2s" }}>Continue →</button>
             </div>
           )}
 
+          {/* Step 1: Duration */}
           {step === 1 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>Style & Budget</h2>
-              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>What look are you going for?</p>
-              <div style={{ marginBottom: 28 }}>
-                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Visual Style</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {STYLES.map(s => (
-                    <button key={s} onClick={() => setStyle(s)} style={{ padding: "10px 18px", borderRadius: 6, border: "1px solid", borderColor: style === s ? "#1a1a1a" : "#ddd", background: style === s ? "#1a1a1a" : "#fff", color: style === s ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{s}</button>
-                  ))}
-                </div>
-              </div>
-              <div style={{ marginBottom: 40 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-                  <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>Daily Budget</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, fontWeight: 500, color: "#1a1a1a" }}>${budget}</div>
-                </div>
-                <input type="range" min={150} max={1200} step={50} value={budget} onChange={e => setBudget(Number(e.target.value))} style={{ width: "100%", cursor: "pointer" }} />
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#bbb", fontFamily: "'DM Mono', monospace", marginTop: 6 }}>
-                  <span>$150</span><span>$1,200</span>
-                </div>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>How long do you need us?</h2>
+              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>Select the coverage that fits your project.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 40 }}>
+                {DURATIONS.map(d => (
+                  <button key={d.label} onClick={() => setDuration(d.label)} style={{ padding: "18px 20px", borderRadius: 8, border: "1px solid", borderColor: duration === d.label ? "#1a1a1a" : "#e8e3dc", background: duration === d.label ? "#1a1a1a" : "#fff", color: duration === d.label ? "#f5f0e8" : "#1a1a1a", cursor: "pointer", textAlign: "left", transition: "all 0.15s", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500 }}>{d.label}</div>
+                      <div style={{ fontSize: 12, opacity: 0.55, marginTop: 3 }}>{d.desc}</div>
+                    </div>
+                    {duration === d.label && <span>✓</span>}
+                  </button>
+                ))}
               </div>
               <div style={{ display: "flex", gap: 10 }}>
                 <button onClick={() => setStep(0)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid #ddd", background: "#fff", color: "#666", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 13 }}>← Back</button>
-                <button onClick={() => setStep(2)} style={{ flex: 2, padding: 14, borderRadius: 6, border: "none", background: "#1a1a1a", color: "#f5f0e8", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 600 }}>Continue →</button>
+                <button disabled={!duration} onClick={() => setStep(2)} style={{ flex: 2, padding: 14, borderRadius: 6, border: "none", background: duration ? "#1a1a1a" : "#e8e3dc", color: duration ? "#f5f0e8" : "#aaa", cursor: duration ? "pointer" : "not-allowed", fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 600, transition: "all 0.2s" }}>Continue →</button>
               </div>
             </div>
           )}
 
+          {/* Step 2: Location + email */}
           {step === 2 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>Where's the shoot?</h2>
-              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>We'll find creatives near you or available to travel.</p>
-              <input type="text" placeholder="City, State (e.g. Los Angeles, CA)" value={city} onChange={e => setCity(e.target.value)} style={{ width: "100%", padding: "16px 18px", border: "1px solid #ddd", borderRadius: 6, fontSize: 15, outline: "none", fontFamily: "'DM Sans', sans-serif", marginBottom: 40, background: "#fff", color: "#1a1a1a" }} />
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>Almost there.</h2>
+              <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>We'll calculate travel from our Frisco, TX base and send you the full breakdown.</p>
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 10 }}>Shoot location</div>
+                <input type="text" placeholder="City, State (e.g. Nashville, TN)" value={clientCity} onChange={e => setClientCity(e.target.value)} style={{ width: "100%", padding: "16px 18px", border: "1px solid #ddd", borderRadius: 6, fontSize: 15, outline: "none", fontFamily: "'DM Sans', sans-serif", background: "#fff", color: "#1a1a1a" }} />
+              </div>
+              <div style={{ marginBottom: 40 }}>
+                <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 10 }}>Your email</div>
+                <input type="email" placeholder="you@example.com" value={clientEmail} onChange={e => setClientEmail(e.target.value)} style={{ width: "100%", padding: "16px 18px", border: "1px solid #ddd", borderRadius: 6, fontSize: 15, outline: "none", fontFamily: "'DM Sans', sans-serif", background: "#fff", color: "#1a1a1a" }} />
+              </div>
               <div style={{ display: "flex", gap: 10 }}>
                 <button onClick={() => setStep(1)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid #ddd", background: "#fff", color: "#666", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 13 }}>← Back</button>
-                <button onClick={runAIMatch} style={{ flex: 2, padding: 14, borderRadius: 6, border: "none", background: "#1a1a1a", color: "#f5f0e8", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 600 }}>✦ Find My Match</button>
+                <button disabled={!clientCity || !clientEmail} onClick={getQuote} style={{ flex: 2, padding: 14, borderRadius: 6, border: "none", background: (clientCity && clientEmail) ? "#1a1a1a" : "#e8e3dc", color: (clientCity && clientEmail) ? "#f5f0e8" : "#aaa", cursor: (clientCity && clientEmail) ? "pointer" : "not-allowed", fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 600, transition: "all 0.2s" }}>✦ Get My Quote</button>
               </div>
             </div>
           )}
 
+          {/* Step 3: Loading + Result */}
           {step === 3 && (
             <div className="fade-in">
-              {aiThinking ? (
+              {quoting ? (
                 <div style={{ textAlign: "center", padding: "80px 0" }}>
                   <div style={{ width: 52, height: 52, borderRadius: 12, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 22, color: "#f5f0e8" }}>◈</div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, marginBottom: 12 }}>Finding your match</h3>
-                  <p style={{ color: "#aaa", marginBottom: 24, fontWeight: 300 }}>Reviewing your criteria against our creator network…</p>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, marginBottom: 12 }}>Building your quote</h3>
+                  <p style={{ color: "#aaa", marginBottom: 24, fontWeight: 300 }}>Calculating creative fees and travel from Frisco, TX…</p>
                   <LoadingDots />
                 </div>
-              ) : (
-                <div>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 14px", borderRadius: 20, background: "#f0faf0", border: "1px solid #c0dcc0", color: "#4a8a4a", fontSize: 11, fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>✓ Match Complete</div>
-                  <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 12 }}>Your Top Matches</h2>
-                  <p style={{ color: "#666", lineHeight: 1.7, padding: "14px 18px", background: "#fff", borderRadius: 8, border: "1px solid #e8e3dc", fontSize: 14, marginBottom: 28 }}>{aiNote}</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    {matchedCreators.map((c, i) => <CreatorCard key={c.id} creator={c} featured={i === 0} />)}
+              ) : quote && !quote.error ? (
+                <div className="fade-in">
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 14px", borderRadius: 20, background: "#f0faf0", border: "1px solid #c0dcc0", color: "#4a8a4a", fontSize: 11, fontFamily: "'DM Mono', monospace", marginBottom: 24 }}>✓ Quote Ready</div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 56, fontWeight: 300, color: "#1a1a1a", lineHeight: 1, marginBottom: 6 }}>
+                    ${quote.totalMin?.toLocaleString()} – ${quote.totalMax?.toLocaleString()}
                   </div>
-                  <button onClick={() => { setStep(0); setMatches(null); setProjectType(""); setCreatorType(""); setStyle(""); setCity(""); }} style={{ width: "100%", marginTop: 24, padding: 14, borderRadius: 6, border: "1px solid #ddd", background: "#fff", color: "#888", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 12 }}>← Start Over</button>
+                  <div style={{ color: "#aaa", fontSize: 12, fontFamily: "'DM Mono', monospace", marginBottom: 36 }}>estimated total · {shootType} · {duration}</div>
+
+                  <div style={{ background: "#fff", border: "1px solid #e8e3dc", borderRadius: 10, padding: "6px 24px", marginBottom: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "16px 0", borderBottom: "1px solid #f0ece6" }}>
+                      <span style={{ fontSize: 14, color: "#666" }}>Creative fee</span>
+                      <span style={{ fontSize: 14, fontFamily: "'DM Mono', monospace" }}>${quote.creativeFeeMin?.toLocaleString()} – ${quote.creativeFeeMax?.toLocaleString()}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "16px 0" }}>
+                      <span style={{ fontSize: 14, color: "#666" }}>Travel ({clientCity})</span>
+                      <span style={{ fontSize: 14, fontFamily: "'DM Mono', monospace", color: quote.travelFreeZone ? "#4a8a4a" : "#1a1a1a" }}>
+                        {quote.travelFreeZone ? "No charge ✓" : `$${quote.travelFee?.toLocaleString()}`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {quote.travelNote && (
+                    <div style={{ padding: "13px 16px", background: "#f8f6f2", borderRadius: 8, fontSize: 13, color: "#777", marginBottom: 16, lineHeight: 1.65 }}>
+                      {quote.travelNote}
+                    </div>
+                  )}
+                  {quote.turnaround && (
+                    <div style={{ fontSize: 12, color: "#aaa", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
+                      Delivery: {quote.turnaround}
+                    </div>
+                  )}
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 16px", background: "#f0faf0", borderRadius: 8, fontSize: 12, color: "#4a8a4a", fontFamily: "'DM Mono', monospace", marginBottom: 32 }}>
+                    ✓ Full breakdown sent to {clientEmail}
+                  </div>
+                  <button onClick={resetQuote} style={{ width: "100%", padding: 14, borderRadius: 6, border: "1px solid #ddd", background: "#fff", color: "#888", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 12 }}>← Start Over</button>
+                </div>
+              ) : (
+                <div style={{ textAlign: "center", padding: "80px 0" }}>
+                  <p style={{ color: "#888", marginBottom: 20 }}>Something went wrong. Please try again.</p>
+                  <button onClick={() => setStep(2)} style={{ padding: "12px 24px", borderRadius: 6, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 13 }}>← Go Back</button>
                 </div>
               )}
             </div>

@@ -183,7 +183,8 @@ export default function NinthOfAugustApp() {
               <video
                 controls
                 muted
-                autoPlay={false}
+                autoPlay
+                loop
                 playsInline
                 style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}
               >

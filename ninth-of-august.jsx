@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 // ─── Your Photos ───────────────────────────────────────────────
-const IMG1 = "/photo1.jpg";
-const IMG2 = "/photo2.jpg";
-const IMG3 = "/photo3.jpg";
+const IMG1 = "/photo1.png";
+const IMG2 = "/photo2.png";
+const IMG3 = "/photo3.png";
 const IMG4 = "/photo4.jpg";
 const IMG5 = "/photo5.jpg";
 const IMG6 = "/photo6.jpg";
-const IMG7 = "/photo7.jpg";
+const IMG7 = "/photo7.png";
 
 // Photo metadata — edit labels/categories to match your actual work
 const PORTFOLIO = [

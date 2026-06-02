@@ -189,7 +189,7 @@ export default function NinthOfAugustApp() {
                 playsInline
                 style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}
               >
-                <source src="https://www.dropbox.com/scl/fi/o0e8pqbep1adj670t9iwt/cdee-drink-mp4.mp4?rlkey=98exhz7tnidy5xbehbi82rjg0&st=78fteklx&dl=1" type="video/mp4" />
+                <source src="https://res.cloudinary.com/dgcjboqtu/video/upload/v1780434560/cdee_drink_mp4_dtbcgl.mp4" type="video/mp4" />
               </video>
             </div>
           </div>

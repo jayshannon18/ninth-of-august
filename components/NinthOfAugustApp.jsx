@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ─── Your Photos ───────────────────────────────────────────────
 const IMG1 = "/photo1.png";
@@ -11,7 +11,6 @@ const IMG5 = "/photo5.jpg";
 const IMG6 = "/photo6.jpg";
 const IMG7 = "/photo7.png";
 
-// Photo metadata — edit labels/categories to match your actual work
 const PORTFOLIO = [
   { id: 1, src: IMG1, category: "Portrait", label: "Studio Editorial", client: "Personal Project", aspect: "portrait" },
   { id: 2, src: IMG2, category: "Lifestyle", label: "Outdoor Lifestyle", client: "Brand Shoot", aspect: "landscape" },
@@ -23,7 +22,6 @@ const PORTFOLIO = [
 ];
 
 const CATEGORIES = ["All", "Portrait", "Lifestyle", "Product"];
-
 const SHOOT_TYPES = ["Brand Campaign", "Portrait Session", "Product Shoot", "Lifestyle Content", "Event Coverage", "Music Video", "Wedding"];
 const MEDIA_TYPES = ["Photography", "Videography", "Both"];
 const DURATIONS = [
@@ -33,8 +31,6 @@ const DURATIONS = [
   { label: "2 Days", desc: "Multi-look campaigns, extended coverage" },
   { label: "3+ Days", desc: "Large-scale productions, destination shoots" },
 ];
-
-// ─── Subcomponents ──────────────────────────────────────────────
 
 function LoadingDots() {
   return (
@@ -47,7 +43,6 @@ function LoadingDots() {
   );
 }
 
-// ─── Main App ───────────────────────────────────────────────────
 export default function NinthOfAugustApp() {
   const [view, setView] = useState("home");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -60,6 +55,14 @@ export default function NinthOfAugustApp() {
   const [clientEmail, setClientEmail] = useState("");
   const [quoting, setQuoting] = useState(false);
   const [quote, setQuote] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const filtered = activeCategory === "All" ? PORTFOLIO : PORTFOLIO.filter(p => p.category === activeCategory);
 
@@ -99,6 +102,8 @@ export default function NinthOfAugustApp() {
     input[type=range] { accent-color: #1a1a1a; }
   `;
 
+  const m = isMobile;
+
   return (
     <div style={{ minHeight: "100vh", background: "#f5f0e8", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{css}</style>
@@ -117,14 +122,14 @@ export default function NinthOfAugustApp() {
       )}
 
       {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(245,240,232,0.96)", backdropFilter: "blur(12px)", borderBottom: "1px solid #e0d8cc", padding: "0 32px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(245,240,232,0.96)", backdropFilter: "blur(12px)", borderBottom: "1px solid #e0d8cc", padding: m ? "0 16px" : "0 32px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <button onClick={() => setView("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", color: "#f5f0e8", fontSize: 16 }}>◈</div>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: "#1a1a1a", letterSpacing: 0.5 }}>9th of August</span>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 18 : 22, fontWeight: 600, color: "#1a1a1a", letterSpacing: 0.5 }}>9th of August</span>
         </button>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           {[["Work", "portfolio"], ["Pricing", "wizard"]].map(([label, v]) => (
-            <button key={v} onClick={() => { setView(v); setStep(0); setMatches(null); }} style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: view === v ? "#1a1a1a" : "transparent", color: view === v ? "#f5f0e8" : "#666", fontSize: 13, cursor: "pointer", fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{label}</button>
+            <button key={v} onClick={() => { setView(v); setStep(0); setQuote(null); }} style={{ padding: m ? "8px 12px" : "8px 16px", borderRadius: 6, border: "none", background: view === v ? "#1a1a1a" : "transparent", color: view === v ? "#f5f0e8" : "#666", fontSize: 13, cursor: "pointer", fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{label}</button>
           ))}
         </div>
       </nav>
@@ -133,21 +138,20 @@ export default function NinthOfAugustApp() {
       {view === "home" && (
         <div className="fade-in">
 
-          {/* Hero — full bleed split */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "92vh" }}>
-            {/* Left: text */}
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 64px", borderRight: "1px solid #e0d8cc" }}>
+          {/* Hero */}
+          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "1fr 1fr", minHeight: m ? "auto" : "92vh" }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: m ? "60px 24px 48px" : "80px 64px", borderRight: m ? "none" : "1px solid #e0d8cc" }}>
               <div style={{ fontSize: 11, letterSpacing: 3, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 32 }}>
                 Photography & Videography
               </div>
-              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 5.5vw, 84px)", fontWeight: 300, lineHeight: 1.05, color: "#1a1a1a", marginBottom: 32 }}>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(44px, 5.5vw, 84px)", fontWeight: 300, lineHeight: 1.05, color: "#1a1a1a", marginBottom: 32 }}>
                 We make<br /><em style={{ fontStyle: "italic", fontWeight: 600 }}>your brand</em><br />unforgettable.
               </h1>
               <p style={{ fontSize: 17, color: "#666", lineHeight: 1.7, maxWidth: 420, marginBottom: 48, fontWeight: 300 }}>
                 Clean, confident visuals for brands, artists, and moments that matter. Nationwide network, AI-matched to your exact project.
               </p>
-              <div style={{ display: "flex", gap: 12 }}>
-                <button onClick={() => setView("wizard")} style={{ padding: "14px 32px", borderRadius: 6, border: "none", background: "#1a1a1a", color: "#f5f0e8", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: 0.5, transition: "opacity 0.15s" }} onMouseEnter={e=>e.target.style.opacity=.8} onMouseLeave={e=>e.target.style.opacity=1}>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <button onClick={() => setView("wizard")} style={{ padding: "14px 32px", borderRadius: 6, border: "none", background: "#1a1a1a", color: "#f5f0e8", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: 0.5 }}>
                   Get a Quote →
                 </button>
                 <button onClick={() => setView("portfolio")} style={{ padding: "14px 32px", borderRadius: 6, border: "1px solid #1a1a1a", background: "transparent", color: "#1a1a1a", fontSize: 14, cursor: "pointer", fontFamily: "'DM Mono', monospace" }}>
@@ -155,14 +159,15 @@ export default function NinthOfAugustApp() {
                 </button>
               </div>
             </div>
-            {/* Right: hero image */}
-            <div style={{ position: "relative", overflow: "hidden" }}>
-              <img src={IMG7} alt="Editorial portrait" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(245,240,232,0.08), transparent)" }} />
-            </div>
+            {!m && (
+              <div style={{ position: "relative", overflow: "hidden" }}>
+                <img src={IMG7} alt="Editorial portrait" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(245,240,232,0.08), transparent)" }} />
+              </div>
+            )}
           </div>
 
-          {/* Marquee strip */}
+          {/* Marquee */}
           <div style={{ borderTop: "1px solid #e0d8cc", borderBottom: "1px solid #e0d8cc", padding: "14px 0", overflow: "hidden", background: "#1a1a1a" }}>
             <div style={{ display: "flex", gap: 48, color: "#f5f0e8", fontSize: 11, fontFamily: "'DM Mono', monospace", letterSpacing: 2, whiteSpace: "nowrap", opacity: 0.6 }}>
               {Array(6).fill(["PORTRAIT", "LIFESTYLE", "PRODUCT", "BRAND", "EDITORIAL", "NATIONWIDE"]).flat().map((t, i) => (
@@ -171,90 +176,94 @@ export default function NinthOfAugustApp() {
             </div>
           </div>
 
-          {/* Featured Video Section */}
-          <div style={{ padding: "80px 48px", borderBottom: "1px solid #e0d8cc" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40 }}>
+          {/* Featured Video */}
+          <div style={{ padding: m ? "48px 20px" : "80px 48px", borderBottom: "1px solid #e0d8cc" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40, flexWrap: "wrap", gap: 12 }}>
               <div>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Featured Work</div>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 400 }}>Behind the Lens</h2>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 32 : 42, fontWeight: 400 }}>Behind the Lens</h2>
               </div>
               <div style={{ fontSize: 13, color: "#999", fontFamily: "'DM Mono', monospace", fontStyle: "italic" }}>Brand · Lifestyle · Product</div>
             </div>
-            {/* Featured video */}
             <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", background: "#0e0e0e", boxShadow: "0 24px 64px rgba(0,0,0,0.15)" }}>
-              <video
-                controls
-                muted
-                autoPlay
-                loop
-                playsInline
-                style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}
-              >
+              <video controls muted autoPlay loop playsInline style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}>
                 <source src="https://res.cloudinary.com/dgcjboqtu/video/upload/v1780434560/cdee_drink_mp4_dtbcgl.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
 
-          {/* Work preview — 3-up grid */}
-          <div style={{ padding: "80px 48px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40 }}>
+          {/* Work preview */}
+          <div style={{ padding: m ? "48px 20px" : "80px 48px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40, flexWrap: "wrap", gap: 12 }}>
               <div>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Selected Work</div>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 400 }}>Recent Projects</h2>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 32 : 42, fontWeight: 400 }}>Recent Projects</h2>
               </div>
               <button onClick={() => setView("portfolio")} style={{ fontSize: 13, color: "#1a1a1a", background: "none", border: "1px solid #1a1a1a", padding: "8px 20px", borderRadius: 6, cursor: "pointer", fontFamily: "'DM Mono', monospace" }}>View All →</button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", gap: 3 }}>
-              {/* Featured large */}
-              <div onClick={() => setLightbox(0)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", gridRow: "span 2", aspectRatio: "3/4" }}>
-                <img src={IMG1} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px 20px 20px", background: "linear-gradient(transparent, rgba(0,0,0,0.55))", color: "#fff" }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8, marginBottom: 4 }}>PORTRAIT</div>
-                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 400 }}>Studio Editorial</div>
+
+            {m ? (
+              /* Mobile: 2-col grid featuring the blue-sky photo */
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}>
+                {[
+                  { src: IMG2, idx: 1, pos: "center" },
+                  { src: IMG1, idx: 0, pos: "center top" },
+                  { src: IMG7, idx: 6, pos: "center top" },
+                  { src: IMG3, idx: 2, pos: "center top" },
+                ].map(item => (
+                  <div key={item.idx} onClick={() => setLightbox(item.idx)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "1" }}>
+                    <img src={item.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: item.pos }} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Desktop: asymmetric 3-col grid */
+              <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", gap: 3 }}>
+                <div onClick={() => setLightbox(0)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", gridRow: "span 2", aspectRatio: "3/4" }}>
+                  <img src={IMG1} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px 20px 20px", background: "linear-gradient(transparent, rgba(0,0,0,0.55))", color: "#fff" }}>
+                    <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8, marginBottom: 4 }}>PORTRAIT</div>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 400 }}>Studio Editorial</div>
+                  </div>
+                </div>
+                <div onClick={() => setLightbox(6)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
+                  <img src={IMG7} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
+                    <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>LIFESTYLE</div>
+                  </div>
+                </div>
+                <div onClick={() => setLightbox(3)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
+                  <img src={IMG4} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
+                    <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>PRODUCT</div>
+                  </div>
+                </div>
+                <div onClick={() => setLightbox(2)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
+                  <img src={IMG3} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
+                    <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>LIFESTYLE</div>
+                  </div>
+                </div>
+                <div onClick={() => setLightbox(4)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
+                  <img src={IMG5} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
+                    <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>PRODUCT</div>
+                  </div>
                 </div>
               </div>
-              {/* Top right */}
-              <div onClick={() => setLightbox(6)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
-                <img src={IMG7} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>LIFESTYLE</div>
-                </div>
-              </div>
-              {/* Bottom right */}
-              <div onClick={() => setLightbox(3)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
-                <img src={IMG4} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>PRODUCT</div>
-                </div>
-              </div>
-              {/* Bottom right 2 */}
-              <div onClick={() => setLightbox(2)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
-                <img src={IMG3} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>LIFESTYLE</div>
-                </div>
-              </div>
-              <div onClick={() => setLightbox(4)} style={{ position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in", aspectRatio: "4/3" }}>
-                <img src={IMG5} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 16px 12px", background: "linear-gradient(transparent, rgba(0,0,0,0.5))", color: "#fff" }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: 2, opacity: 0.8 }}>PRODUCT</div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Story / emotional section */}
+          {/* Story section */}
           <div style={{ borderTop: "1px solid #e0d8cc" }}>
-            {/* Image — wide cinematic crop */}
-            <div style={{ width: "100%", aspectRatio: "16/7", overflow: "hidden", position: "relative" }}>
+            <div style={{ width: "100%", aspectRatio: m ? "4/3" : "16/7", overflow: "hidden", position: "relative" }}>
               <img src={IMG1} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(26,26,26,0.18))" }} />
             </div>
-            {/* Text panel below, full width dark */}
-            <div style={{ background: "#1a1a1a", color: "#f5f0e8", padding: "72px 48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
+            <div style={{ background: "#1a1a1a", color: "#f5f0e8", padding: m ? "48px 24px" : "72px 48px", display: "grid", gridTemplateColumns: m ? "1fr" : "1fr 1fr", gap: m ? 32 : 64, alignItems: "center" }}>
               <div>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: "#888", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 24 }}>Our Approach</div>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(40px, 4vw, 64px)", fontWeight: 300, lineHeight: 1.05 }}>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 4vw, 64px)", fontWeight: 300, lineHeight: 1.05 }}>
                   Every frame<br />tells <em style={{ fontStyle: "italic" }}>your</em> story.
                 </h2>
               </div>
@@ -265,7 +274,7 @@ export default function NinthOfAugustApp() {
                 <p style={{ fontSize: 16, color: "#777", lineHeight: 1.8, fontWeight: 300, marginBottom: 36 }}>
                   From intimate portrait sessions to full brand campaigns, our vetted network of creatives brings the same level of intention to every project.
                 </p>
-                <button onClick={() => setView("wizard")} style={{ padding: "14px 28px", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 6, background: "transparent", color: "#f5f0e8", fontSize: 13, cursor: "pointer", fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }} onMouseEnter={e=>{e.target.style.background="rgba(255,255,255,0.1)"}} onMouseLeave={e=>{e.target.style.background="transparent"}}>
+                <button onClick={() => setView("wizard")} style={{ padding: "14px 28px", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 6, background: "transparent", color: "#f5f0e8", fontSize: 13, cursor: "pointer", fontFamily: "'DM Mono', monospace" }}>
                   Start Your Project →
                 </button>
               </div>
@@ -273,19 +282,19 @@ export default function NinthOfAugustApp() {
           </div>
 
           {/* Stats bar */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", borderTop: "1px solid #e0d8cc", borderBottom: "1px solid #e0d8cc" }}>
+          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr 1fr" : "repeat(4, 1fr)", borderTop: "1px solid #e0d8cc", borderBottom: "1px solid #e0d8cc" }}>
             {[["4,000+","Shoots Completed"],["50","States Covered"],["500+","Vetted Creators"],["4.9 ★","Avg Rating"]].map(([num, label], i) => (
-              <div key={i} style={{ padding: "40px 24px", textAlign: "center", borderRight: i < 3 ? "1px solid #e0d8cc" : "none" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 40, fontWeight: 600, color: "#1a1a1a", marginBottom: 6 }}>{num}</div>
-                <div style={{ fontSize: 11, color: "#999", fontFamily: "'DM Mono', monospace", letterSpacing: 2, textTransform: "uppercase" }}>{label}</div>
+              <div key={i} style={{ padding: m ? "28px 16px" : "40px 24px", textAlign: "center", borderRight: m ? (i % 2 === 0 ? "1px solid #e0d8cc" : "none") : (i < 3 ? "1px solid #e0d8cc" : "none"), borderBottom: m && i < 2 ? "1px solid #e0d8cc" : "none" }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 32 : 40, fontWeight: 600, color: "#1a1a1a", marginBottom: 6 }}>{num}</div>
+                <div style={{ fontSize: 10, color: "#999", fontFamily: "'DM Mono', monospace", letterSpacing: 2, textTransform: "uppercase" }}>{label}</div>
               </div>
             ))}
           </div>
 
           {/* CTA */}
-          <div style={{ padding: "100px 48px", textAlign: "center", background: "#f5f0e8" }}>
+          <div style={{ padding: m ? "64px 24px" : "100px 48px", textAlign: "center", background: "#f5f0e8" }}>
             <div style={{ fontSize: 11, letterSpacing: 3, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 24 }}>Ready when you are</div>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(40px, 5vw, 72px)", fontWeight: 300, marginBottom: 20, lineHeight: 1.1 }}>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 72px)", fontWeight: 300, marginBottom: 20, lineHeight: 1.1 }}>
               Let's make something<br /><em style={{ fontStyle: "italic", fontWeight: 600 }}>worth remembering.</em>
             </h2>
             <p style={{ fontSize: 17, color: "#888", marginBottom: 48, fontWeight: 300 }}>Match with a creator in minutes. No back-and-forth, no guesswork.</p>
@@ -298,18 +307,18 @@ export default function NinthOfAugustApp() {
 
       {/* ── PORTFOLIO ── */}
       {view === "portfolio" && (
-        <div className="fade-in" style={{ padding: "60px 48px" }}>
+        <div className="fade-in" style={{ padding: m ? "40px 16px" : "60px 48px" }}>
           <div style={{ marginBottom: 48 }}>
             <div style={{ fontSize: 11, letterSpacing: 3, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 16 }}>Portfolio</div>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 400, marginBottom: 32 }}>Selected Work</h2>
-            <div style={{ display: "flex", gap: 6 }}>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 40 : 52, fontWeight: 400, marginBottom: 32 }}>Selected Work</h2>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {CATEGORIES.map(cat => (
                 <button key={cat} onClick={() => setActiveCategory(cat)} style={{ padding: "8px 18px", borderRadius: 20, border: "1px solid", borderColor: activeCategory === cat ? "#1a1a1a" : "#ddd", background: activeCategory === cat ? "#1a1a1a" : "transparent", color: activeCategory === cat ? "#f5f0e8" : "#666", fontSize: 12, cursor: "pointer", fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{cat}</button>
               ))}
             </div>
           </div>
-          <div style={{ columns: "3 280px", gap: 6 }}>
-            {filtered.map((photo, idx) => (
+          <div style={{ columns: m ? 2 : "3 280px", gap: 6 }}>
+            {filtered.map((photo) => (
               <div key={photo.id} onClick={() => setLightbox(PORTFOLIO.findIndex(p => p.id === photo.id))} className="scale-in" style={{ breakInside: "avoid", marginBottom: 6, position: "relative", overflow: "hidden", borderRadius: 4, cursor: "zoom-in" }}>
                 <img src={photo.src} alt={photo.label} style={{ width: "100%", display: "block", transition: "transform 0.5s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"} />
                 <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0)", transition: "background 0.3s", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "20px 16px" }}
@@ -329,9 +338,8 @@ export default function NinthOfAugustApp() {
 
       {/* ── WIZARD ── */}
       {view === "wizard" && (
-        <div className="fade-in" style={{ maxWidth: 600, margin: "0 auto", padding: "60px 24px" }}>
+        <div className="fade-in" style={{ maxWidth: 600, margin: "0 auto", padding: m ? "40px 16px" : "60px 24px" }}>
 
-          {/* Progress bar */}
           {step < 3 && (
             <div style={{ marginBottom: 48 }}>
               <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
@@ -345,10 +353,9 @@ export default function NinthOfAugustApp() {
             </div>
           )}
 
-          {/* Step 0: Shoot type + media type */}
           {step === 0 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>What are you creating?</h2>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 36 : 42, marginBottom: 8 }}>What are you creating?</h2>
               <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>Tell us about the project and we'll build a custom quote.</p>
               <div style={{ marginBottom: 28 }}>
                 <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Type of shoot</div>
@@ -361,8 +368,8 @@ export default function NinthOfAugustApp() {
               <div style={{ marginBottom: 40 }}>
                 <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 12 }}>Services needed</div>
                 <div style={{ display: "flex", gap: 8 }}>
-                  {MEDIA_TYPES.map(m => (
-                    <button key={m} onClick={() => setMediaType(m)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid", borderColor: mediaType === m ? "#1a1a1a" : "#ddd", background: mediaType === m ? "#1a1a1a" : "#fff", color: mediaType === m ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{m}</button>
+                  {MEDIA_TYPES.map(me => (
+                    <button key={me} onClick={() => setMediaType(me)} style={{ flex: 1, padding: 14, borderRadius: 6, border: "1px solid", borderColor: mediaType === me ? "#1a1a1a" : "#ddd", background: mediaType === me ? "#1a1a1a" : "#fff", color: mediaType === me ? "#f5f0e8" : "#666", cursor: "pointer", fontSize: 13, fontFamily: "'DM Mono', monospace", transition: "all 0.15s" }}>{me}</button>
                   ))}
                 </div>
               </div>
@@ -370,10 +377,9 @@ export default function NinthOfAugustApp() {
             </div>
           )}
 
-          {/* Step 1: Duration */}
           {step === 1 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>How long do you need us?</h2>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 36 : 42, marginBottom: 8 }}>How long do you need us?</h2>
               <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>Select the coverage that fits your project.</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 40 }}>
                 {DURATIONS.map(d => (
@@ -393,10 +399,9 @@ export default function NinthOfAugustApp() {
             </div>
           )}
 
-          {/* Step 2: Location + email */}
           {step === 2 && (
             <div className="fade-in">
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, marginBottom: 8 }}>Almost there.</h2>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 36 : 42, marginBottom: 8 }}>Almost there.</h2>
               <p style={{ color: "#888", marginBottom: 36, fontWeight: 300 }}>We'll calculate travel from our Frisco, TX base and send you the full breakdown.</p>
               <div style={{ marginBottom: 20 }}>
                 <div style={{ fontSize: 11, letterSpacing: 2, color: "#999", fontFamily: "'DM Mono', monospace", textTransform: "uppercase", marginBottom: 10 }}>Shoot location</div>
@@ -413,7 +418,6 @@ export default function NinthOfAugustApp() {
             </div>
           )}
 
-          {/* Step 3: Loading + Result */}
           {step === 3 && (
             <div className="fade-in">
               {quoting ? (
@@ -426,11 +430,10 @@ export default function NinthOfAugustApp() {
               ) : quote && !quote.error ? (
                 <div className="fade-in">
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 14px", borderRadius: 20, background: "#f0faf0", border: "1px solid #c0dcc0", color: "#4a8a4a", fontSize: 11, fontFamily: "'DM Mono', monospace", marginBottom: 24 }}>✓ Quote Ready</div>
-                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 56, fontWeight: 300, color: "#1a1a1a", lineHeight: 1, marginBottom: 6 }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 44 : 56, fontWeight: 300, color: "#1a1a1a", lineHeight: 1, marginBottom: 6 }}>
                     ${quote.totalMin?.toLocaleString()} – ${quote.totalMax?.toLocaleString()}
                   </div>
                   <div style={{ color: "#aaa", fontSize: 12, fontFamily: "'DM Mono', monospace", marginBottom: 36 }}>estimated total · {shootType} · {duration}</div>
-
                   <div style={{ background: "#fff", border: "1px solid #e8e3dc", borderRadius: 10, padding: "6px 24px", marginBottom: 16 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", padding: "16px 0", borderBottom: "1px solid #f0ece6" }}>
                       <span style={{ fontSize: 14, color: "#666" }}>Creative fee</span>
@@ -443,7 +446,6 @@ export default function NinthOfAugustApp() {
                       </span>
                     </div>
                   </div>
-
                   {quote.travelNote && (
                     <div style={{ padding: "13px 16px", background: "#f8f6f2", borderRadius: 8, fontSize: 13, color: "#777", marginBottom: 16, lineHeight: 1.65 }}>
                       {quote.travelNote}
@@ -477,7 +479,7 @@ export default function NinthOfAugustApp() {
       )}
 
       {/* Footer */}
-      <footer style={{ borderTop: "1px solid #e0d8cc", padding: "40px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f5f0e8" }}>
+      <footer style={{ borderTop: "1px solid #e0d8cc", padding: m ? "32px 20px" : "40px 48px", display: "flex", flexDirection: m ? "column" : "row", justifyContent: "space-between", alignItems: "center", background: "#f5f0e8", gap: m ? 12 : 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 28, height: 28, borderRadius: 6, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", color: "#f5f0e8", fontSize: 14 }}>◈</div>
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600 }}>9th of August</span>

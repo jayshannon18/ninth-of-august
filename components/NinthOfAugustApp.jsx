@@ -180,17 +180,17 @@ export default function NinthOfAugustApp() {
               </div>
               <div style={{ fontSize: 13, color: "#999", fontFamily: "'DM Mono', monospace", fontStyle: "italic" }}>Brand · Lifestyle · Product</div>
             </div>
-            {/* YouTube embed — 16:9 responsive */}
-            <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", borderRadius: 10, overflow: "hidden", background: "#0e0e0e", boxShadow: "0 24px 64px rgba(0,0,0,0.15)" }}>
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/wSTDuA39ors?autoplay=0&color=white&controls=0&modestbranding=1&iv_load_policy=3&rel=0"
-                title="9th of August — Featured Work"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{ position: "absolute", top: "-10%", left: 0, width: "100%", height: "120%", border: "none" }}
-              />
-              {/* Mask the YouTube title bar that appears at the top on hover */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "12%", background: "#0e0e0e", zIndex: 1, pointerEvents: "none" }} />
+            {/* Featured video */}
+            <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", background: "#0e0e0e", boxShadow: "0 24px 64px rgba(0,0,0,0.15)" }}>
+              <video
+                controls
+                muted
+                autoPlay={false}
+                playsInline
+                style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}
+              >
+                <source src="https://www.dropbox.com/scl/fi/q7yzm4wq9xx8rybb22gaw/Ced-drink.mov?rlkey=p3eqszrhv4ao5892iw15d37qc&st=2afieygs&dl=1" />
+              </video>
             </div>
           </div>
 

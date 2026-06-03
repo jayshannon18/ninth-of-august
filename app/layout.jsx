@@ -1,5 +1,5 @@
 // UPDATE: replace ninthofaugust.com with your actual domain
-const SITE_URL = 'https://ninthofaugust.com';
+const SITE_URL = 'https://9thofaugust.com';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -8,8 +8,8 @@ const jsonLd = {
   name: '9th of August',
   description: 'Professional video production agency and commercial photography studio based in Frisco, Texas. Specializing in brand campaigns, music videos, product photography, and lifestyle content.',
   url: SITE_URL,
-  telephone: '+14690000000', // UPDATE: your real phone number (no spaces/dashes)
-  email: 'hello@ninthofaugust.com', // UPDATE: your real email
+  telephone: '+18706361283', // UPDATE: your real phone number (no spaces/dashes)
+  email: 'shop@9thofaugust.com', // UPDATE: your real email
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Frisco',

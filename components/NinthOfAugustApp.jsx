@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 
 // ─── UPDATE THESE ──────────────────────────────────────────────
-const CONTACT_PHONE = "(469) 000-0000"; // your phone number
-const CONTACT_EMAIL_DISPLAY = "hello@ninthofaugust.com"; // your email
+const CONTACT_PHONE = "(870) 636-1283"; // your phone number
+const CONTACT_EMAIL_DISPLAY = "shop@9thofaugust.com"; // your email
 const CONTACT_LOCATION = "Frisco, TX · Dallas–Fort Worth";
 
 // ─── Your Photos ───────────────────────────────────────────────

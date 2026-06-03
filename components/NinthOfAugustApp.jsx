@@ -205,7 +205,7 @@ export default function NinthOfAugustApp() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(245,240,232,0.96)", backdropFilter: "blur(12px)", borderBottom: "1px solid #e0d8cc", padding: m ? "0 16px" : "0 32px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <button onClick={() => setView("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", color: "#f5f0e8", fontSize: 16 }}>◈</div>
+          <img src="/shorthand.png" alt="9th of August" style={{ width: 32, height: 32, borderRadius: 8, objectFit: "contain" }} />
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 18 : 22, fontWeight: 600, color: "#1a1a1a", letterSpacing: 0.5 }}>9th of August</span>
         </button>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -673,7 +673,9 @@ export default function NinthOfAugustApp() {
             <div className="fade-in">
               {quoting ? (
                 <div style={{ textAlign: "center", padding: "80px 0" }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 12, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 22, color: "#f5f0e8" }}>◈</div>
+                  <div style={{ width: 52, height: 52, borderRadius: 12, background: "#1a1a1a", overflow: "hidden", margin: "0 auto 24px" }}>
+                    <img src="/shorthand.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", filter: "invert(1)" }} />
+                  </div>
                   <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, marginBottom: 12 }}>Building your quote</h3>
                   <p style={{ color: "#aaa", marginBottom: 24, fontWeight: 300 }}>Calculating creative fees and travel from Frisco, TX…</p>
                   <LoadingDots />
@@ -737,7 +739,7 @@ export default function NinthOfAugustApp() {
         <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "1fr 1fr 1fr", gap: m ? 32 : 48, marginBottom: 40 }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 6, background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", color: "#f5f0e8", fontSize: 14 }}>◈</div>
+              <img src="/shorthand.png" alt="9th of August" style={{ width: 28, height: 28, borderRadius: 6, objectFit: "contain" }} />
               <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600 }}>9th of August</span>
             </div>
             <p style={{ fontSize: 13, color: "#888", lineHeight: 1.7, maxWidth: 260 }}>Professional video production agency and commercial photography studio based in Frisco, TX.</p>

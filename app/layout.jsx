@@ -153,6 +153,11 @@ export const metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  icons: {
+    icon: '/shorthand.png',
+    shortcut: '/shorthand.png',
+    apple: '/shorthand.png',
+  },
 };
 
 export default function RootLayout({ children }) {

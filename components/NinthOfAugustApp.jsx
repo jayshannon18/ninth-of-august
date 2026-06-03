@@ -6,6 +6,8 @@ import { useState, useEffect, useRef } from "react";
 const CONTACT_PHONE = "(870) 636-1283"; // your phone number
 const CONTACT_EMAIL_DISPLAY = "shop@9thofaugust.com"; // your email
 const CONTACT_LOCATION = "Frisco, TX · Dallas–Fort Worth";
+const INSTAGRAM_URL = "https://www.instagram.com/9thofaugust9";
+const FACEBOOK_URL = "https://www.facebook.com/9thofaugust9";
 
 // ─── Your Photos ───────────────────────────────────────────────
 const IMG1 = "/photo1.png";
@@ -266,7 +268,7 @@ export default function NinthOfAugustApp() {
               <div style={{ fontSize: 13, color: "#999", fontFamily: "'DM Mono', monospace", fontStyle: "italic" }}>Brand · Lifestyle · Product</div>
             </div>
             <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", background: "#0e0e0e", boxShadow: "0 24px 64px rgba(0,0,0,0.15)" }}>
-              <video controls muted autoPlay loop playsInline style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}>
+              <video muted autoPlay loop playsInline style={{ display: "block", width: "100%", background: "#0e0e0e", borderRadius: 10 }}>
                 <source src="https://res.cloudinary.com/dgcjboqtu/video/upload/v1780434560/cdee_drink_mp4_dtbcgl.mp4" type="video/mp4" />
               </video>
             </div>
@@ -389,7 +391,7 @@ export default function NinthOfAugustApp() {
 
           {/* Stats bar */}
           <div style={{ display: "grid", gridTemplateColumns: m ? "1fr 1fr" : "repeat(4, 1fr)", borderTop: "1px solid #e0d8cc", borderBottom: "1px solid #e0d8cc" }}>
-            {[["4,000+","Shoots Completed"],["50","States Covered"],["500+","Vetted Creators"],["4.9 ★","Avg Rating"]].map(([num, label], i) => (
+            {[["4,000+","Shoots Completed"],["50","States Covered"],["1-on-1","Personal Service"],["4.9 ★","Avg Rating"]].map(([num, label], i) => (
               <div key={i} style={{ padding: m ? "28px 16px" : "40px 24px", textAlign: "center", borderRight: m ? (i % 2 === 0 ? "1px solid #e0d8cc" : "none") : (i < 3 ? "1px solid #e0d8cc" : "none"), borderBottom: m && i < 2 ? "1px solid #e0d8cc" : "none" }}>
                 <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: m ? 32 : 40, fontWeight: 600, color: "#1a1a1a", marginBottom: 6 }}>{num}</div>
                 <div style={{ fontSize: 10, color: "#999", fontFamily: "'DM Mono', monospace", letterSpacing: 2, textTransform: "uppercase" }}>{label}</div>
@@ -467,6 +469,20 @@ export default function NinthOfAugustApp() {
                         {item.sub && <div style={{ fontSize: 12, color: "#666", marginTop: 2 }}>{item.sub}</div>}
                       </div>
                     </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+                  {[
+                    { href: `mailto:${CONTACT_EMAIL_DISPLAY}`, label: "Email", svg: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
+                    { href: INSTAGRAM_URL, label: "Instagram", svg: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
+                    { href: FACEBOOK_URL, label: "Facebook", svg: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
+                  ].map(item => (
+                    <a key={item.label} href={item.href} target={item.href.startsWith("mailto") ? undefined : "_blank"} rel="noopener noreferrer" aria-label={item.label}
+                      style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "#f5f0e8", textDecoration: "none" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.16)"}
+                      onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}>
+                      {item.svg}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -739,6 +755,20 @@ export default function NinthOfAugustApp() {
               <a href={`mailto:${CONTACT_EMAIL_DISPLAY}`} style={{ fontSize: 13, color: "#666", textDecoration: "none" }}>{CONTACT_EMAIL_DISPLAY}</a>
               <span style={{ fontSize: 13, color: "#888" }}>{CONTACT_LOCATION}</span>
               <button onClick={goToContact} style={{ marginTop: 8, padding: "10px 20px", borderRadius: 6, border: "1px solid #1a1a1a", background: "transparent", color: "#1a1a1a", fontSize: 12, cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "center" }}>Send a Message →</button>
+              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                {[
+                  { href: `mailto:${CONTACT_EMAIL_DISPLAY}`, label: "Email", svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
+                  { href: INSTAGRAM_URL, label: "Instagram", svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
+                  { href: FACEBOOK_URL, label: "Facebook", svg: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
+                ].map(item => (
+                  <a key={item.label} href={item.href} target={item.href.startsWith("mailto") ? undefined : "_blank"} rel="noopener noreferrer" aria-label={item.label}
+                    style={{ width: 36, height: 36, borderRadius: 8, background: "#f0ece6", border: "1px solid #e0d8cc", display: "flex", alignItems: "center", justifyContent: "center", color: "#1a1a1a", textDecoration: "none" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#e8e3dc"}
+                    onMouseLeave={e => e.currentTarget.style.background = "#f0ece6"}>
+                    {item.svg}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

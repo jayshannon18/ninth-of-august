@@ -716,13 +716,9 @@ export default function NinthOfAugustApp() {
                       Delivery: {quote.turnaround}
                     </div>
                   )}
-                  {quote.emailSent ? (
+                  {quote.emailSent && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 16px", background: "#f0faf0", border: "1px solid #c0dcc0", borderRadius: 8, fontSize: 12, color: "#4a8a4a", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
                       ✓ Full breakdown sent to {clientEmail}
-                    </div>
-                  ) : (
-                    <div style={{ padding: "12px 16px", background: "#fff8f0", border: "1px solid #f0d8b0", borderRadius: 8, fontSize: 12, color: "#996600", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
-                      Email not sent{quote.emailError ? `: ${quote.emailError}` : " — check your RESEND_API_KEY env var"}
                     </div>
                   )}
                   <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>

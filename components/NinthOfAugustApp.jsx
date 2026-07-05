@@ -17,6 +17,10 @@ const IMG4 = "/photo4.jpg";
 const IMG5 = "/photo5.jpg";
 const IMG6 = "/photo6.jpg";
 const IMG7 = "/photo7.png";
+const IMG8 = "/photo8.png";
+const IMG9 = "/photo9.png";
+const IMG10 = "/photo10.png";
+const IMG11 = "/photo11.png";
 
 const PORTFOLIO = [
   { id: 1, src: IMG1, category: "Portrait", label: "Studio Editorial", client: "Personal Project", aspect: "portrait" },
@@ -26,6 +30,10 @@ const PORTFOLIO = [
   { id: 5, src: IMG5, category: "Product", label: "Product Collection", client: "The Bean Guys", aspect: "square" },
   { id: 6, src: IMG6, category: "Product", label: "Food & Beverage", client: "Restaurant Client", aspect: "landscape" },
   { id: 7, src: IMG7, category: "Portrait", label: "Urban Editorial", client: "Fashion Client", aspect: "portrait" },
+  { id: 8, src: IMG8, category: "Lifestyle", label: "Pet & Lifestyle", client: "Personal Project", aspect: "portrait" },
+  { id: 9, src: IMG9, category: "Portrait", label: "Graduation Editorial", client: "Graduate Session", aspect: "portrait" },
+  { id: 10, src: IMG10, category: "Lifestyle", label: "Storefront Feature", client: "Brand Client", aspect: "portrait" },
+  { id: 11, src: IMG11, category: "Lifestyle", label: "Spring Fashion", client: "Fashion Client", aspect: "portrait" },
 ];
 
 const CATEGORIES = ["All", "Portrait", "Lifestyle", "Product"];
